@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?bfe92433ab53b7ffdb8a952d8b6ecbe9";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心率监测系统 | 首页</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* 复用auth.html的样式体系（片段5） */
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* 新增引导页特有样式 */
+        .hero-section {
+            text-align: center;
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .demo-section {
+            background: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .github-section {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            margin-top: 60px;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .github-link:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .github-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* 复用default.html心跳动画（片段9） */
+        .heart-demo {
+            height: 100px;
+            width: 100px;
+            margin: 20px auto;
+            animation: heart 1s linear infinite;
+        }
+
+        .sponsors-single {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .logo-container {
+            background: linear-gradient(135deg, #ffffff 0%, #f1f3f5 100%);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .sponsor-logo {
+            width: 220px;
+            height: 60px;
+            object-fit: contain;
+            padding: 8px;
+        }
+
+        .sponsor-link:hover .logo-container {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.15);
+        }
+
+        .sponsor-description {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+<div class="hero-section">
+    <h1 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 20px;">
+        ❤️ 实时心率监测系统-示例
+    </h1>
+    <p style="font-size: 1.2rem; color: #666; margin-bottom: 40px;">
+        安全可靠的心率数据管理与共享示例解决方案
+    </p>
+    <a href="/health" style="...">立即开始 →</a>
+</div>
+
+<div class="features-grid">
+    <div class="feature-card">
+        <h3>📈 实时监测</h3>
+        <p>秒级延迟的心率数据可视化展示</p>
+    </div>
+    <div class="feature-card">
+        <h3>🔗 API 集成</h3>
+        <p>提供标准化的数据上报与查询接口</p>
+    </div>
+    <div class="feature-card">
+        <h3>🛡️ 安全共享</h3>
+        <p>基于UUID的加密数据访问控制</p>
+    </div>
+</div>
+
+<div class="demo-section">
+    <h2 style="margin-bottom: 30px;">实时数据演示</h2>
+    <div class="heart-demo"></div>
+    <p style="color: #666;">当前演示心率：<span id="demo-rate">72</span> BPM</p>
+</div>
+
+<!-- 修改sponsors-section部分 -->
+<div class="sponsors-section">
+    <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary);">服务器赞助商</h2>
+    <div class="sponsors-single">
+        <a href="https://www.zovps.com/" target="_blank" class="sponsor-link">
+            <div class="logo-container">
+                <img src="/static/sponsors/ciyun.png" alt="CiYun" class="sponsor-logo">
+            </div>
+            <p class="sponsor-description">提供高性能云计算服务支持</p>
+        </a>
+    </div>
+</div>
+
+<div class="github-section">
+    <a href="https://github.com/xihan123/HeartRateHook" target="_blank" class="github-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+        </svg>
+        GitHub 仓库
+    </a>
+</div>
+
+<script>
+    // 模拟心跳动画
+    function animateHeart() {
+        const rates = [72, 75, 68, 80, 65];
+        let index = 0;
+        setInterval(() => {
+            document.getElementById('demo-rate').textContent = rates[index++ % rates.length];
+        }, 2000);
+    }
+
+    animateHeart();
+</script>
+</body>
+</html>

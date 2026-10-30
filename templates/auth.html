@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心率监测系统 | 认证</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+        }
+
+        .auth-illustration {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .auth-form {
+            flex: 1;
+            padding: 40px;
+            position: relative;
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .form-title {
+            margin-bottom: 30px;
+            color: var(--dark);
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--secondary);
+        }
+
+        .result-container {
+            display: none;
+        }
+
+        .result-title {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .url-box {
+            position: relative;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .url-box p {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+        }
+
+        .url-box .icon {
+            margin-right: 8px;
+        }
+
+        .url-box input {
+            background: white;
+            padding-right: 80px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            width: auto;
+            padding: 8px 15px;
+            background: var(--success);
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: auto;
+            padding: 8px 20px;
+            background: var(--danger);
+        }
+
+        .error-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--danger);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+            }
+
+            .auth-illustration {
+                padding: 30px;
+            }
+
+            .auth-form {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-illustration">
+        <div>
+            <h1 style="font-size: 28px; margin-bottom: 10px;">❤️ 心率监测系统</h1>
+            <p>实时共享您的心率数据</p>
+        </div>
+    </div>
+
+    <div class="auth-form">
+        <!-- 登录表单 -->
+        <div id="login-form">
+            <h2 class="form-title">欢迎使用</h2>
+            <div class="tab-container">
+                <div class="tab active" onclick="switchTab('login')">登录</div>
+                <div class="tab" onclick="switchTab('register')">注册</div>
+            </div>
+            <div class="form-group">
+                <label for="login-username">用户名</label>
+                <input type="text" id="login-username" placeholder="输入您的用户名" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">密码</label>
+                <input type="password" id="login-password" placeholder="输入您的密码" required>
+            </div>
+            <button onclick="login()">登录</button>
+        </div>
+
+        <!-- 注册表单 -->
+        <div id="register-form" style="display: none;">
+            <h2 class="form-title">创建账户</h2>
+            <div class="tab-container">
+                <div class="tab" onclick="switchTab('login')">登录</div>
+                <div class="tab active" onclick="switchTab('register')">注册</div>
+            </div>
+            <div class="form-group">
+                <label for="register-username">用户名</label>
+                <input type="text" id="register-username" placeholder="创建用户名" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">密码</label>
+                <input type="password" id="register-password" placeholder="创建密码(至少8位)" required
+                       oninput="validatePassword()">
+                <div class="password-strength"></div>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">确认密码</label>
+                <input type="password" id="confirm-password" placeholder="再次输入密码" required>
+            </div>
+            <button onclick="register()">注册</button>
+        </div>
+
+        <!-- 结果展示 -->
+        <div id="result-container" class="result-container">
+            <button class="logout-btn" onclick="logout()">退出</button>
+            <h3 class="result-title">🎉 登录成功！</h3>
+            <div class="url-box">
+                <p><span class="icon">👁️</span>公开心率查看页面</p>
+                <input type="text" id="view-url" readonly>
+                <button class="copy-btn" onclick="copyToClipboard('view-url')">复制</button>
+            </div>
+            <div class="url-box">
+                <p><span class="icon">📤</span>数据上报接口 (POST)</p>
+                <input type="text" id="report-url" readonly>
+                <button class="copy-btn" onclick="copyToClipboard('report-url')">复制</button>
+            </div>
+            <div class="url-box">
+                <p><span class="icon">📊</span>最新数据接口 (GET)</p>
+                <input type="text" id="latest-url" readonly>
+                <button class="copy-btn" onclick="copyToClipboard('latest-url')">复制</button>
+            </div>
+            <div class="url-box">
+                <p><span class="icon">🔒</span>您的UUID (认证后获取)</p>
+                <input type="text" id="user-uuid" readonly>
+                <button class="copy-btn" onclick="copyToClipboard('user-uuid')">复制</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="error-toast" class="error-toast"></div>
+
+<script>
+    let currentUserUUID = '';
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        if (tab === 'login') {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+            document.querySelectorAll('.tab')[0].classList.add('active');
+        } else {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+            document.querySelectorAll('.tab')[1].classList.add('active');
+        }
+    }
+
+    function showToast(message, type = 'error') {
+        const toast = document.getElementById('error-toast');
+        toast.textContent = message;
+        toast.style.background = type === 'error' ? 'var(--danger)' : 'var(--success)';
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    function validatePassword() {
+        const password = document.getElementById('register-password').value;
+        const confirm = document.getElementById('confirm-password').value;
+        const strengthBar = document.querySelector('.password-strength');
+
+        // 密码强度计算逻辑
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (password.match(/[A-Z]/)) strength++;
+        if (password.match(/[0-9]/)) strength++;
+        if (password.match(/[^A-Za-z0-9]/)) strength++;
+
+        strengthBar.style.width = `${strength * 25}%`;
+        strengthBar.style.background = ['#ff4444', '#ffbb33', '#00C851', '#00C851'][strength - 1];
+    }
+
+    async function login() {
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password})
+            });
+
+            if (response.ok) {
+                await fetchUserUUID();
+            } else {
+                showToast('登录失败，请检查凭据');
+            }
+        } catch (error) {
+            showToast('网络错误，请重试');
+        }
+    }
+
+    async function register() {
+        const username = document.getElementById('register-username').value;
+        const password = document.getElementById('register-password').value;
+        const confirm = document.getElementById('confirm-password').value;
+
+        if (password !== confirm) {
+            showToast('两次输入的密码不一致');
+            return;
+        }
+
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password})
+            });
+
+            if (response.ok) {
+                await fetchUserUUID();
+            } else {
+                showToast('注册失败，用户名可能已被使用');
+            }
+        } catch (error) {
+            showToast('网络错误，请重试');
+        }
+    }
+
+    // 获取用户UUID (通过认证cookie)
+    async function fetchUserUUID() {
+        try {
+            const response = await fetch('/uuid', {
+                credentials: 'include' // 包含cookie
+            });
+
+            if (!response.ok) {
+                throw new Error('获取用户信息失败');
+            }
+
+            const data = await response.json();
+            currentUserUUID = data.data.uuid;
+            if (currentUserUUID) {
+                handleAuthSuccess(currentUserUUID, data.data.report_token);
+            }
+            document.getElementById('user-uuid').value = currentUserUUID;
+        } catch (error) {
+            console.error('获取UUID失败:', error);
+        }
+    }
+
+    function handleAuthSuccess(uuid, reportToken) {
+        currentUserUUID = uuid;
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('register-form').style.display = 'none';
+        document.getElementById('result-container').style.display = 'block';
+
+        // 更新URL显示
+        const baseUrl = window.location.origin;
+        document.getElementById('view-url').value = `${baseUrl}/uuid/widget/view/${uuid}`;
+        document.getElementById('report-url').value = `${baseUrl}/uuid/${reportToken}/receive_data`;
+        document.getElementById('latest-url').value = `${baseUrl}/uuid/${uuid}/latest-heart-rate`;
+        document.getElementById('user-uuid').value = uuid;
+    }
+
+    async function logout() {
+        try {
+            await fetch('/logout', {
+                method: 'POST',
+            });
+            window.location.reload();
+        } catch (error) {
+            showToast('退出失败，请重试');
+        }
+    }
+
+    function copyToClipboard(elementId) {
+        const el = document.getElementById(elementId);
+        navigator.clipboard.writeText(el.value).then(() => {
+            showToast('✅ 复制成功', 'success');
+        }).catch(() => {
+            showToast('❌ 复制失败');
+        });
+    }
+</script>
+</body>
+</html>

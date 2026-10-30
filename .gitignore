@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.idea/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*
+/heart-rate-server
+/heart-rate-server.exe
+/bin/
+*.test
+*.test.exe
+coverage.out

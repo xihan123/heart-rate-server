@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<!-- thanks: https://github.com/StudyLeaks/heartbeat/ -->
+<!-- thanks: https://github.com/Tnze/miband-heart-rate -->
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Heart Beat StudyLeaks</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Young+Serif&display=swap');
+
+        :root {
+            --heart-speed: 1s;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }
+
+        .heart {
+            height: 30px;
+            width: 30px;
+            background: #f20044;
+            position: relative;
+            transform: rotate(-45deg) translate(-4px, 4px);
+            box-shadow: -10px 10px 90px #f20044;
+            animation: heart var(--heart-speed) linear infinite;
+            margin: 20px;
+        }
+
+        #heart-rate-number {
+            font-size: 50px;
+            font-family: 'Young Serif', serif;
+            vertical-align: text-top;
+            color: #ffffff;
+            text-shadow: #f20044 0px 0px 20px,
+            #f20044 0px 0px 40px,
+            #fff 0px 0px 50px,
+            #fff 0px 0px 60px;
+        }
+
+        @keyframes heart {
+            0% {
+                transform: rotate(-45deg) scale(1.07) translate(-4px, 4px);
+            }
+            80% {
+                transform: rotate(-45deg) scale(1) translate(-4px, 4px);
+            }
+            100% {
+                transform: rotate(-45deg) scale(0.9) translate(-4px, 4px);
+            }
+        }
+
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            height: 30px;
+            width: 30px;
+            background: #f20044;
+            border-radius: 40px;
+            box-shadow: 0 0 50px #f20044;
+        }
+
+        .heart::before {
+            top: -50%;
+            left: 0;
+        }
+
+        .heart::after {
+            right: -50%;
+            top: 0;
+        }
+    </style>
+    <script>
+        function setHeartRate(heartRate) {
+            document.documentElement.style.setProperty('--heart-speed', (60 / heartRate) + 's');
+            document.getElementById('heart-rate-number').innerText = heartRate;
+        }
+
+        async function updateHeartRate() {
+            const uuid = window.location.pathname.split('/')[4];
+            if (!uuid) {
+                console.error('UUID not found in URL');
+                return;
+            }
+            while (true) {
+                try {
+                    const response = await fetch(`${window.location.origin}/uuid/${uuid}/latest-heart-rate`);
+                    const data = await response.json();
+                    if (!response.ok || !data.data || !data.data.heart_rate) {
+                        console.error('Invalid response data:', data);
+                        document.getElementById('heart-rate-number').innerText = '--';
+                    } else {
+                        const heartRate = data.data.heart_rate;
+                        setHeartRate(heartRate);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    document.getElementById('heart-rate-number').innerText = '--';
+                }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
+
+        if (document.location.protocol !== 'file:') {
+            window.addEventListener('DOMContentLoaded', updateHeartRate);
+        } else {
+            window.addEventListener('load', () => setHeartRate(60));
+        }
+    </script>
+</head>
+
+<body>
+<div id="heart" class="heart"></div>
+<div id="heart-rate-number"></div>
+</body>
+
+</html>
